@@ -2,6 +2,7 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" type="image/png" href="https://raw.githubusercontent.com/Hidashimora/free-vpn-anti-rkn/refs/heads/main/icon.svg.svg">
     <title>Белые Списки: Теория и Обход</title>
     <style>
@@ -36,7 +37,7 @@
             box-shadow: 0 4px 20px rgba(0,0,0,0.3);
             border: 1px solid var(--bg2);
         }
-        h1 { color: var(--fg0); border-bottom: 3px solid var(--blue); padding-bottom: 10px; }
+        h1 { color: var(--fg0); border-bottom: 3px solid var(--blue); padding-bottom: 10px; font-size: 1.8em; }
         h2 { color: var(--blue); margin-top: 30px; border-bottom: 1px solid var(--bg2); padding-bottom: 5px; }
         h3 { color: var(--yellow); margin-top: 25px; }
         h4 { color: var(--orange); margin-bottom: 10px; }
@@ -91,11 +92,16 @@
             border-color: var(--green);
         }
 
+        .table-wrapper {
+            overflow-x: auto;
+            margin: 20px 0;
+            border-radius: 8px;
+        }
         table {
             width: 100%;
             border-collapse: collapse;
-            margin: 20px 0;
             background: var(--bg1);
+            min-width: 600px;
         }
         th, td {
             border: 1px solid var(--bg2);
@@ -118,6 +124,45 @@
             margin-bottom: 15px;
             box-shadow: 0 2px 5px rgba(0,0,0,0.1);
         }
+
+        .usage-container {
+            display: grid;
+            gap: 10px;
+            margin: 20px 0;
+        }
+        .usage-step {
+            display: flex;
+            align-items: center;
+            background: var(--bg1);
+            padding: 12px 15px;
+            border-radius: 8px;
+            border: 1px solid var(--bg2);
+        }
+        .step-badge {
+            background: var(--blue);
+            color: var(--bg0);
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            margin-right: 15px;
+            flex-shrink: 0;
+        }
+        .alert-box {
+            background-color: rgba(251, 73, 52, 0.1);
+            border: 1px solid var(--red);
+            border-left: 5px solid var(--red);
+            padding: 15px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            margin-top: 20px;
+            color: var(--fg1);
+        }
+
         blockquote {
             border-left: 4px solid var(--gray);
             margin: 10px 0;
@@ -127,7 +172,6 @@
         }
         a { color: var(--blue); text-decoration: none; }
         a:hover { color: var(--yellow); text-decoration: underline; }
-        
         strong { color: var(--fg0); }
 
         .footer {
@@ -161,6 +205,17 @@
         .tg-color:hover { background: var(--blue); }
         .gh-color:hover { background: var(--purple); }
 
+        /* Mobile adaptation */
+        @media (max-width: 600px) {
+            .container { padding: 20px 15px; }
+            h1 { font-size: 1.4em; }
+            .subscription-item { flex-direction: column; align-items: flex-start; gap: 10px; }
+            .copy-btn { width: 100%; text-align: center; }
+            .usage-step { align-items: flex-start; }
+            .alert-box { flex-direction: column; text-align: center; }
+            .alert-box span { margin-bottom: 10px; margin-right: 0; }
+        }
+
     </style>
 </head>
 <body>
@@ -170,47 +225,47 @@
 
     <div class="theory-section">
         <blockquote>
-            <strong>Белые Списки(White Lists)</strong> это механизм с помощью которого разрешается доступ только к определённым ресурсам 
+            <strong>Белые Списки (White Lists)</strong> — это механизм, с помощью которого разрешается доступ только к определённым ресурсам.
         </blockquote>
 
         <h5>Чем они отличаются от Чёрных списков?</h5>
-        <p>Посмотреть различия можно в таблице ниже</p>
-
-        <table>
-            <thead>
-                <tr>
-                    <th>Характеристика</th>
-                    <th>Белый список (Whitelist)</th>
-                    <th>Черный список (Blacklist)</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td><strong>Основной принцип</strong></td>
-                    <td><strong>Запрещено всё</strong>, что не разрешено явно.</td>
-                    <td><strong>Разрешено всё</strong>, что не запрещено явно.</td>
-                </tr>
-                <tr>
-                    <td><strong>Логика проверки</strong></td>
-                    <td>Система ищет объект в списке <strong>разрешенных</strong>.</td>
-                    <td>Система ищет объект в списке <strong>запрещенных</strong>.</td>
-                </tr>
-                <tr>
-                    <td><strong>Действие по умолчанию</strong></td>
-                    <td><strong>Блокировка</strong> (Default Deny).</td>
-                    <td><strong>Пропуск</strong> (Default Allow).</td>
-                </tr>
-                <tr>
-                    <td><strong>Если объекта нет в списке</strong></td>
-                    <td>Доступ <strong>отклоняется</strong>.</td>
-                    <td>Доступ <strong>предоставляется</strong>.</td>
-                </tr>
-            </tbody>
-        </table>
+        <div class="table-wrapper">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Характеристика</th>
+                        <th>Белый список (Whitelist)</th>
+                        <th>Черный список (Blacklist)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Основной принцип</strong></td>
+                        <td><strong>Запрещено всё</strong>, что не разрешено явно.</td>
+                        <td><strong>Разрешено всё</strong>, что не запрещено явно.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Логика проверки</strong></td>
+                        <td>Система ищет объект в списке <strong>разрешенных</strong>.</td>
+                        <td>Система ищет объект в списке <strong>запрещенных</strong>.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Действие по умолчанию</strong></td>
+                        <td><strong>Блокировка</strong> (Default Deny).</td>
+                        <td><strong>Пропуск</strong> (Default Allow).</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Если объекта нет в списке</strong></td>
+                        <td>Доступ <strong>отклоняется</strong>.</td>
+                        <td>Доступ <strong>предоставляется</strong>.</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
     </div>
 
     <h2>Как обойти Белые Списки</h2>
-    <p>Воспользуемся бесплатными конфигурациями которые могут работать во время Белых Списков</p>
+    <p>Воспользуемся бесплатными конфигурациями, которые могут работать во время Белых Списков:</p>
 
     <h3>1. Список конфигураций</h3>
     
@@ -218,7 +273,7 @@
     <div class="subscription-list">
         <div class="subscription-item">
             <span class="link-text">CIDR CHECKED</span>
-            <button class="copy-btn" onclick="copyText('raw.githubusercontent.com/igareck/vpn-configs-for-russia/refs/heads/main/WHITE-CIDR-RU-checked.txt', this)">Копировать</button>
+            <button class="copy-btn" onclick="copyText('https://raw.githubusercontent.com/igareck/vpn-configs-for-russia/refs/heads/main/WHITE-CIDR-RU-checked.txt', this)">Копировать</button>
         </div>
         <div class="subscription-item">
             <span class="link-text">CIDR ALL</span>
@@ -285,25 +340,52 @@
 
     <h3>3. Добавление подписок</h3>
     <div class="instruction-step"><code>Throne</code>: Приложение > Добавить профиль из буфера обмена > Создать новую группу подписки</div>
-    <div class="instruction-step"><code>Karing</code>: Добавить профиль > Импорт из буфера обмена > Примечание можно указать любое > Под кнопкой подключения выбираем какой нибудь сервер</div>
-    <div class="instruction-step"><code>v2rayN</code>: Серверы > Импорт массива URL из буфера обмена > Переходим в подписку > Группа подписки > Обновить подписку без прокси</div>
-    <div class="instruction-step"><code>NekoBox</code>: Три полоски > Группы > Плюсик > Имя любое > Тип группы: Подписка > Ссылка для подписки вставляем ссылку</div>
-    <div class="instruction-step"><code>Streisand</code>: Плюсик > Добавить вручную > Тип: Subscription > Название любое > URL вставляем ссылку > Автообновление 30 минут</div>
-    <div class="instruction-step"><code>singbox-launcher</code>: Скачиваем Sing-box > Скачиваем wintun.dll > Скачиваем Config template > Жмём Wizard > в Subscription URL вставляем ссылку > Жмём Next > Жмём Next > Жмём Save > Жмём Start > Идём во вкладку Server > Выбираем любой сервер</div>
+    <div class="instruction-step"><code>Karing</code>: Добавить профиль > Импорт из буфера обмена > Примечание любое > Выбираем сервер</div>
+    <div class="instruction-step"><code>v2rayN</code>: Серверы > Импорт массива URL > Группа подписки > Обновить подписку без прокси</div>
+    <div class="instruction-step"><code>NekoBox</code>: Три полоски > Группы > Плюсик > Тип: Подписка > Вставляем ссылку</div>
+    <div class="instruction-step"><code>Streisand</code>: Плюсик > Добавить вручную > Тип: Subscription > URL вставляем ссылку</div>
+    <div class="instruction-step"><code>singbox-launcher</code>: Wizard > в Subscription URL вставляем ссылку > Save > Start > Server > Выбираем сервер</div>
 
-    <h3>4. Глоссарий и тонкая настройка:</h3>
+    <h3>4. Использование и логика запуска</h3>
+    <div class="usage-container">
+        <div class="usage-step">
+            <div class="step-badge">1</div>
+            <div class="step-text">
+                После добавления подписки в клиент запускаем <strong>URL Тест</strong> и сортируем список по задержке.
+            </div>
+        </div>
+        <div class="usage-step">
+            <div class="step-badge">2</div>
+            <div class="step-text">
+                Перебираем конфиги с самой маленькой задержкой. <strong>Какой будет работать — тот и используем.</strong>
+            </div>
+        </div>
+        <div class="usage-step">
+            <div class="step-badge">3</div>
+            <div class="step-text">
+                Если не отвечает ни один конфиг — обновите подписку.
+            </div>
+        </div>
+    </div>
+
+    <div class="alert-box">
+        <span style="font-size: 1.5em; margin-right: 15px;">⚠️</span>
+        <div>
+            <strong>Важное примечание:</strong> Для обновления подписки необходим нормально работающий Wi-Fi при включённых «Белых Списках».
+        </div>
+    </div>
+
+    <h3>5. Понятия и дополнительная настройка</h3>
     <div class="theory-section">
-        <p><strong>DoH (DNS over HTTPS) / DoT (DNS over TLS):</strong> Технологии шифрования DNS-запросов, предотвращающие слежку провайдера за тем, какие домены вы посещаете.</p>
-        <p><strong>Stack (TUN):</strong> Программная реализация сетевого интерфейса. <strong>gVisor</strong> — это современный стек от Google, обеспечивающий высокую стабильность и безопасность.</p>
-        <p><strong>MTU (Maximum Transmission Unit):</strong> Максимальный размер пакета данных. Значение <strong>1500</strong> критически важно для корректной работы протокола Hysteria2.</p>
+        <p><strong>DoH (DNS over HTTPS) / DoT (DNS over TLS):</strong> Шифрование DNS-запросов от слежки.</p>
+        <p><strong>Stack (TUN):</strong> Стек сетевого интерфейса. Рекомендуется <strong>gVisor</strong>.</p>
+        <p><strong>MTU:</strong> Размер пакета. Для Hysteria2 критично значение <strong>1500</strong>.</p>
         <hr style="border: 0; border-top: 1px dashed var(--bg2); margin: 15px 0;">
         <p><strong>Рекомендуемые параметры:</strong></p>
         <ul>
             <li>Удаленный DNS: <code>https://1.1.1.1/dns-query</code></li>
-            <li>Прямой DNS: <code>1.1.1.1</code></li>
             <li>Stack (TUN): <code>gVisor</code></li>
             <li>MTU: <code>1500</code></li>
-            <li>Автообновление: каждые 2 часа</li>
         </ul>
     </div>
 
